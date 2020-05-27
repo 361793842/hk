@@ -48,6 +48,7 @@ public class EventController {
                         BeanUtils.populate(bean,eventMap);
                         bean.setHappenTime(ToolsUtil.timeUTCFormat(bean.getHappenTime()));
                         log.info(bean.toString());
+                        log.info("开始将告警信息推送到服务端");
                         Request.pushAlarm(bean);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
@@ -63,13 +64,19 @@ public class EventController {
                     try {
                         BeanUtils.populate(ldEventBean,map1);
                         ldEventBean.setHappenTime(ToolsUtil.timeUTCFormat(ldEventBean.getHappenTime()));
+                        List<EventDetailBean> eventDetails= (List<EventDetailBean>) map1.get("eventDetails");
+                        ldEventBean.setEventDetail(eventDetails);
                         log.info("events:{}",ldEventBean.toString());
-                        List<Map<String,Object>> eventDetails= (List<Map<String, Object>>) map1.get("eventDetails");
-                        for (Map<String,Object> map2:eventDetails){
+                        log.info("开始将告警详情推送到服务端");
+                        Request.pushAlarm(ldEventBean);
+                        //List<Map<String,Object>> eventDetails= (List<Map<String, Object>>) map1.get("eventDetails");
+                        /*for (Map<String,Object> map2:eventDetails){
                             EventDetailBean eventDetailBean=new EventDetailBean();
                             BeanUtils.populate(eventDetailBean,map2);
                             log.info("event-detail:{}",eventDetailBean.toString());
-                        }
+                            log.info("开始将告警详情推送到服务端");
+                            Request.pushAlarm(eventDetailBean);
+                        }*/
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
@@ -107,8 +114,8 @@ public class EventController {
         return rmap;
     }
     @PostMapping("/recv")
-    public String recv(@RequestBody Map<String,Object> map){
+    public Result recv(@RequestBody Map<String,Object> map){
         log.info("接收到推送事件:{}",map);
-        return "success";
+        return ResultUtil.success();
     }
 }

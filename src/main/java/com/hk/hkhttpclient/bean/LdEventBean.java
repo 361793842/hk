@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author : muwei
  * @ClassName:LdEventBean
@@ -53,4 +55,5 @@ public class LdEventBean {
     private int status;
     private int timeout;
     private String srcParentIndex;
+    private List<EventDetailBean> eventDetail;
 }

@@ -19,4 +19,8 @@ public class ReadCnf {
     private int port;*/
     @Value("${httpAddr}")
     private String httpAddr;
+    @Value("${event.recv.ip}")
+    private String eventRecvIp;
+    @Value("${server.port}")
+    private int serverPort;
 }

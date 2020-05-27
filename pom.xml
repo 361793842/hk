@@ -58,11 +58,12 @@
          <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
          <version>2.2.1</version>
      </dependency>
-        <dependency>
+       <!-- sql打印-->
+        <!--<dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
             <version>3.8.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

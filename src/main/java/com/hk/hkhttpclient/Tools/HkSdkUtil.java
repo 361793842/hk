@@ -3,6 +3,7 @@ package com.hk.hkhttpclient.Tools;
 import com.alibaba.fastjson.JSONObject;
 import com.hikvision.artemis.sdk.ArtemisHttpUtil;
 import com.hk.hkhttpclient.configure.HkArtemisConfig;
+import com.hk.hkhttpclient.configure.ReadCnf;
 import com.hk.hkhttpclient.constant.ErrCode;
 import com.hk.hkhttpclient.enums.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.Map;
 @Slf4j
 public class HkSdkUtil {
     private  String ROOT = "/artemis";
+    private static ReadCnf readCnf= SpringUtil.getBean(ReadCnf.class);
     public HkSdkUtil(){
         HkArtemisConfig.setConfig();
     }
@@ -141,7 +143,7 @@ public class HkSdkUtil {
                 Event.ALARM_SZ_ALARM.getCode()};
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("eventTypes", eventTypes);
-        jsonBody.put("eventDest","http://192.168.0.127:9988/eventRcv");
+        jsonBody.put("eventDest","http://"+ readCnf.getEventRecvIp() +":"+readCnf.getServerPort()+"/eventRcv");
         jsonBody.put("subType",2);
         jsonBody.put("eventLvl",null);
         // jsonBody.put("resourceType", EqumentType.subSys);

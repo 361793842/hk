@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         String errMsg=ex.getMessage().toString();
         log.info(ResultUtil.error(3, ex.getMessage()).toString());
         log.error(ex.getMessage());
-       // ex.printStackTrace();
+        ex.printStackTrace();
         String str = ex.getClass().toString();
         if (errMsg!=null && errMsg.equals(ErrCode.USER_NOT_LOGIN.getMsg())){
             return ResultUtil.error(ErrCode.USER_NOT_LOGIN.getCode(),ErrCode.USER_NOT_LOGIN.getMsg());

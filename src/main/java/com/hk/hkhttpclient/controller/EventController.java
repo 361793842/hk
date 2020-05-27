@@ -2,22 +2,9 @@ package com.hk.hkhttpclient.controller;
 
 import com.hk.hkhttpclient.Tools.GsonUtil;
 import com.hk.hkhttpclient.Tools.HkSdkUtil;
-import com.hk.hkhttpclient.Tools.ResultUtil;
-import com.hk.hkhttpclient.Tools.ToolsUtil;
-import com.hk.hkhttpclient.bean.EventDetailBean;
-import com.hk.hkhttpclient.bean.EventIasBean;
-import com.hk.hkhttpclient.bean.LdEventBean;
-import com.hk.hkhttpclient.bean.Result;
-import com.hk.hkhttpclient.entity.WebLog;
 import com.hk.hkhttpclient.enums.Event;
-import com.hk.hkhttpclient.enums.EventType;
-import com.hk.hkhttpclient.http.Request;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,49 +22,7 @@ public class EventController {
     @PostMapping("/eventRcv")
     public String log(@RequestBody Map<String,Object> map){
         log.info("订阅事件收到消息:{}",map);
-        String method=map.get("method").toString().toLowerCase();
-        if (method.equals("OnEventNotify".toLowerCase())){
-            log.info("事件推送");
-            Map<String,Object> params= (Map<String, Object>) map.get("params");
-            if (params.get("ability").toString().equals(EventType.event_ias.getCode())){
-                log.info(EventType.event_ias.getMsg());
-                List<Map<String, Object>> events= (List<Map<String, Object>>) params.get("events");
-                for(Map<String, Object> eventMap:events){
-                    EventIasBean bean=new EventIasBean();
-                    try {
-                        BeanUtils.populate(bean,eventMap);
-                        bean.setHappenTime(ToolsUtil.timeUTCFormat(bean.getHappenTime()));
-                        log.info(bean.toString());
-                        Request.pushAlarm(bean);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }else if (StringUtils.isEmpty(params.get("ability").toString())){
-                log.info("event-detail");
-                List<Map<String, Object>> events= (List<Map<String, Object>>) params.get("events");
-                for (Map<String, Object> map1:events){
-                    LdEventBean ldEventBean=new LdEventBean();
-                    try {
-                        BeanUtils.populate(ldEventBean,map1);
-                        ldEventBean.setHappenTime(ToolsUtil.timeUTCFormat(ldEventBean.getHappenTime()));
-                        log.info("events:{}",ldEventBean.toString());
-                        List<Map<String,Object>> eventDetails= (List<Map<String, Object>>) map1.get("eventDetails");
-                        for (Map<String,Object> map2:eventDetails){
-                            EventDetailBean eventDetailBean=new EventDetailBean();
-                            BeanUtils.populate(eventDetailBean,map2);
-                            log.info("event-detail:{}",eventDetailBean.toString());
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+
         return "HTTP/1.1 200 OK";
     }
     @PostMapping("/search")
